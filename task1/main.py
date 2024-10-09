@@ -195,7 +195,7 @@ def parse_input(user_input: str) -> Tuple[str, List]:
 @input_error
 def change_contact(args: List[str], book: AddressBook) -> str:
     name = args[0]
-    old_phone, new_phone, *_ = args[1], args[2]
+    old_phone, new_phone = args[1], args[2]
 
     record = book.find(name)
     if record is None:
@@ -209,10 +209,14 @@ def change_contact(args: List[str], book: AddressBook) -> str:
 def add_contact(args, book: AddressBook):
     name, phone, = args[0], args[1]
     record = book.find(name)
-    record = Record(name)
-    book.add_record(record)
-    record.add_phone(phone)
-    book.add_record(record)
+    if record:
+        record.add_phone(phone)
+        return "Contact updated."
+    else:
+        record = Record(name)
+        book.add_record(record)
+        record.add_phone(phone)
+        book.add_record(record) 
     return "Contact added."
 
 
